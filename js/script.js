@@ -1,1 +1,82 @@
-function toggleMenu(){document.getElementById("navMenu").classList.toggle("active")}function closeMenu(){document.getElementById("navMenu").classList.remove("active")}function toggleDark(){document.body.classList.toggle("dark")}const slider=document.getElementById("produkSlider"),nav=document.getElementById("produkNav"),items=slider.querySelectorAll(".produk-item");let currentSlide=0;nav.innerHTML="",items.forEach((_,e)=>{const t=document.createElement("span");0===e&&t.classList.add("active"),t.addEventListener("click",()=>scrollToSlide(e)),nav.appendChild(t)});function scrollToSlide(e){currentSlide=e,slider.scrollTo({left:items[e].offsetLeft,behavior:"smooth"}),updateDots()}function scrollProduk(e){currentSlide+=e,currentSlide<0&&(currentSlide=0),currentSlide>=items.length&&(currentSlide=items.length-1),scrollToSlide(currentSlide)}function updateDots(){const e=nav.querySelectorAll("span");e.forEach(e=>e.classList.remove("active")),e[currentSlide]&&e[currentSlide].classList.add("active")}
+// =========================
+// MENU
+// =========================
+const navMenu = document.getElementById("navMenu");
+
+function toggleMenu() {
+  navMenu.classList.toggle("active");
+}
+
+function closeMenu() {
+  navMenu.classList.remove("active");
+}
+
+// =========================
+// DARK MODE
+// =========================
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+// =========================
+// PRODUK SLIDER
+// =========================
+const slider      = document.getElementById("produkSlider");
+const nav         = document.getElementById("produkNav");
+const items       = slider.querySelectorAll(".produk-item");
+let currentSlide  = 0;
+
+// Buat dot navigasi
+nav.innerHTML = "";
+items.forEach((_, index) => {
+  const dot = document.createElement("span");
+  if (index === 0) dot.classList.add("active");
+  dot.addEventListener("click", () => scrollToSlide(index));
+  nav.appendChild(dot);
+});
+
+function scrollToSlide(index) {
+  currentSlide = index;
+  slider.scrollTo({
+    left: items[index].offsetLeft,
+    behavior: "smooth"
+  });
+  updateDots();
+}
+
+function scrollProduk(step) {
+  currentSlide += step;
+  if (currentSlide < 0) currentSlide = 0;
+  if (currentSlide >= items.length) currentSlide = items.length - 1;
+  scrollToSlide(currentSlide);
+}
+
+function updateDots() {
+  const dots = nav.querySelectorAll("span");
+  dots.forEach(dot => dot.classList.remove("active"));
+  dots[currentSlide]?.classList.add("active");
+}
+
+// =========================
+// ACTIVE LINK SAAT SCROLL
+// =========================
+const sections = document.querySelectorAll("section[id]");
+const navLinks = document.querySelectorAll(".nav-menu a");
+
+window.addEventListener("scroll", () => {
+  let current = "";
+
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (pageYOffset >= top) {
+      current = section.getAttribute("id");
+    }
+  });
+
+  navLinks.forEach(a => {
+    a.classList.remove("active");
+    if (a.getAttribute("href").includes(current)) {
+      a.classList.add("active");
+    }
+  });
+});
